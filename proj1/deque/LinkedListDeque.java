@@ -68,9 +68,9 @@ public class LinkedListDeque<T> implements Deque<T> {
             return null;
         }
 
-        Node<T> temp = sentinel.next;
-        sentinel.next = temp.next;
-        sentinel.next.prev = sentinel;
+        Node<T> temp = sentinel.next; // Keep reference to the first
+        sentinel.next = temp.next; // Set the first to be the next element after temp
+        sentinel.next.prev = sentinel; // Let sentinel next point back to previous
 
         size--;
         return temp.item;
