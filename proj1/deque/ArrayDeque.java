@@ -28,6 +28,11 @@ public class ArrayDeque<T> implements Deque<T> {
         items[first] = item;
         first++;
         size++;
+
+        if (first > items.length - 1) {
+            first = 0;
+        }
+
         if (size == items.length) {
             resize(2 * items.length);
         }
@@ -61,7 +66,22 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
-        return null;
+        if (size == 0) {
+            return null;
+        }
+
+        T item;
+        if (first - 1 < 0) {
+            item = items[items.length - 1];
+            first = items.length - 1;
+        } else {
+            item = items[first - 1];
+            first = first - 1;
+        }
+
+        items[first] = null;
+        return item;
+
     }
 
     @Override
