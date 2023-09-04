@@ -38,6 +38,7 @@ public class TimeAList {
         Ns.addLast(32000);
         Ns.addLast(64000);
         Ns.addLast(128000);
+
         for (int i = 0; i < Ns.size(); i++) {
             AList<Integer> list = new AList<>();
             int currentN = Ns.get(i);
