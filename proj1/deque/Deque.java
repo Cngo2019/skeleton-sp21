@@ -16,4 +16,13 @@ public interface Deque<T> {
     public T removeLast();
 
     public T get(int index);
+
+    default public String printArray() {
+        String out = "";
+        for (int i = 0; i < size(); i++) {
+            out = out + "," + removeFirst();
+        }
+
+        return out;
+    }
 }
