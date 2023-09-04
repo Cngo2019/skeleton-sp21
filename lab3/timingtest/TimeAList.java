@@ -1,5 +1,6 @@
 package timingtest;
 import edu.princeton.cs.algs4.Stopwatch;
+import org.checkerframework.checker.units.qual.A;
 
 /**
  * Created by hug.
@@ -21,7 +22,32 @@ public class TimeAList {
         timeAListConstruction();
     }
 
+    /**
+     * This method should call the printTimingTable after every call and
+     * we should be able to pass in N elements and perform those insertions.
+     */
     public static void timeAListConstruction() {
-        // TODO: YOUR CODE HERE
+        AList<Integer> Ns = new AList<>();
+        AList<Double> times = new AList<>();
+
+        Ns.addLast(100);
+        Ns.addLast(2000);
+        Ns.addLast(4000);
+        Ns.addLast(8000);
+        Ns.addLast(16000);
+        Ns.addLast(32000);
+        Ns.addLast(64000);
+        Ns.addLast(128000);
+        for (int i = 0; i < Ns.size(); i++) {
+            AList<Integer> list = new AList<>();
+            int currentN = Ns.get(i);
+            Stopwatch watch = new Stopwatch();
+            for (int j = 0; j < currentN; j++) {
+                list.addLast(i);
+            }
+            times.addLast(watch.elapsedTime());
+        }
+
+        printTimingTable(Ns, times, Ns);
     }
 }
