@@ -32,7 +32,9 @@ public class ArrayDeque<T> implements Deque<T> {
         items[first] = item;
         first++;
         size++;
-        checkAddPointers();
+        if (!hasArraySizeIncreased()) {
+            checkAddPointers();
+        }
     }
 
     /**
@@ -56,7 +58,9 @@ public class ArrayDeque<T> implements Deque<T> {
         items[last] = item;
         last--;
         size++;
-        checkAddPointers();
+        if (!hasArraySizeIncreased()) {
+            checkAddPointers();
+        }
     }
 
     @Override
@@ -132,21 +136,40 @@ public class ArrayDeque<T> implements Deque<T> {
         return out.toString().trim();
     }
 
-    private void resize(int newSize) {
-        T[] newArr = (T[]) new Object[newSize];
 
-        // Start at last and keep incrementing.
-        for (int i = 0; i < size; i++) {
-            newArr[i] = items[last];
-            last++;
-            if (last > items.length) {
-                last = 0;
+    private void checkSizeAfterRemove() {
+
+    }
+
+    /**
+     * Invariants:
+     *
+     * first and last always point to the next element to be added.
+     * To obtain the elements in sequence order, you need to start out at first - 1
+     * and keep decrementing.
+     *
+     * HOWEVER, we need to copy over the array such that this invariant is maintained.
+     *
+     * We need to be aware of WHEN we should call this.
+     *
+     * Assume that if array is resized the pointers are already in their neccessary slots
+     */
+    private boolean hasArraySizeIncreased() {
+
+        if (size == items.length) {
+            T[] tempItems = (T[]) new Object[items.length * 2];
+            int tempSize = size;
+            for (int i = 0; i < items.length; i++) {
+                tempItems[i] = removeLast();
             }
+
+            items = tempItems;
+            last = items.length - 1;
+            first = tempSize;
+            size = tempSize;
+            return true;
         }
 
-        first = size;
-        last = items.length;
-        items = newArr;
+        return false;
     }
-    
 }

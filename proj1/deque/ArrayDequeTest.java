@@ -30,13 +30,13 @@ public class ArrayDequeTest {
 
     @Test
     public void test_addFirstAndAddLast() {
-        Deque<String> deque = dummyDeque();
+        Deque<String> deque = sampleDequeEight();
         assertEquals(deque.toString(), "G F C B A D E H");
     }
 
     @Test
     public void test_removeFirst() {
-        Deque<String> deque = dummyDeque();
+        Deque<String> deque = sampleDequeEight();
         assertEquals(deque.removeFirst(), "G");
         assertEquals(deque.removeFirst(), "F");
         assertEquals(deque.size(), 6);
@@ -44,7 +44,7 @@ public class ArrayDequeTest {
 
     @Test
     public void test_removeLast() {
-        Deque<String> deque = dummyDeque();
+        Deque<String> deque = sampleDequeEight();
         assertEquals(deque.removeFirst(), "G");
         assertEquals(deque.removeFirst(), "F");
         assertEquals(deque.size(), 6);
@@ -56,7 +56,7 @@ public class ArrayDequeTest {
 
     @Test
     public void test_removeFirstAndLast() {
-        Deque<String> deque = dummyDeque();
+        Deque<String> deque = sampleDequeEight();
         assertEquals(deque.removeFirst(), "G");
         assertEquals(deque.removeFirst(), "F");
         assertEquals(deque.size(), 6);
@@ -92,8 +92,8 @@ public class ArrayDequeTest {
         deque.addFirst("B");
         deque.addFirst("C");
 
-        assertEquals(deque.size(), 4);
-        assertEquals(deque.toString(), "C B A C");
+        assertEquals(deque.size(), 6);
+        assertEquals(deque.toString(), "C B A A B C");
     }
 
     @Test
@@ -131,12 +131,12 @@ public class ArrayDequeTest {
     }
 
     /**
-     * Creates a full deque with sequence G F H B A D E H
+     * Creates a full deque with sequence G F C B A D E H
      * where G is the first element at the front and H
      * is the last element at the back
      * @return
      */
-    private Deque<String> dummyDeque() {
+    private Deque<String> sampleDequeEight() {
         Deque<String> deque = new ArrayDeque<>();
         deque.addFirst("A");
         deque.addFirst("B");
@@ -146,6 +146,31 @@ public class ArrayDequeTest {
         deque.addFirst("F");
         deque.addFirst("G");
         deque.addLast("H");
+        return deque;
+    }
+
+    /**
+     * Test resize for 16 elements
+     */
+    @Test
+    public void test_addSixteenElements() {
+        // C D B A G F C B A D E H E F Z L
+        Deque<String> deque = sampleDequeSixteen();
+        assertEquals(deque.toString(), "C D B A G F C B A D E H E F Z L");
+
+    }
+
+    private Deque<String> sampleDequeSixteen() {
+        Deque<String> deque = sampleDequeEight();
+        deque.addFirst("A");
+        deque.addFirst("B");
+        deque.addFirst("D");
+        deque.addFirst("C");
+        deque.addLast("E");
+        deque.addLast("F");
+        deque.addLast("Z");
+        deque.addLast("L");
+
         return deque;
     }
 }
