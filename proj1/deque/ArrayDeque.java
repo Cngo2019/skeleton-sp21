@@ -1,15 +1,19 @@
 package deque;
 public class ArrayDeque<T> implements Deque<T> {
-
     /**
-     *  Invariant:
-     *  - F and L always point at the next position in line.
-     *  - In order to get the current sequence, it is always just start at L and keep increasing
-     *    the index. If we go out of bounds then jump to the front of the array (index 0).
+     * Invariants:
      *
-     *    I use F and L here for first and last.
+     * -Adding first ALWAYS requires us to increase the index by 1 for the next position
+     *
+     * -Adding last always requires us to decrease the index by 1 for the next position
+     *
+     * -first points to the next position to insert at the front of the list
+     *
+     * -last points to the next position to insert at the end of the list
+     *
+     * -When looking at the 'proper' ordering of the list, we start at F - 1 and decrement.
+     * If we are out of bounds go to end of array.
      */
-
     private T[] items;
     private Integer first;
     private Integer last;
@@ -28,14 +32,6 @@ public class ArrayDeque<T> implements Deque<T> {
         items[first] = item;
         first++;
         size++;
-
-        if (first > items.length - 1) {
-            first = 0;
-        }
-
-        if (size == items.length) {
-            resize(2 * items.length);
-        }
     }
 
     @Override
@@ -43,10 +39,6 @@ public class ArrayDeque<T> implements Deque<T> {
         items[last] = item;
         last--;
         size++;
-
-        if (size == items.length) {
-            resize(2 * items.length);
-        }
     }
 
     @Override
@@ -61,27 +53,13 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public void printDeque() {
-
+        // Calls the toString method
+        System.out.println(this);
     }
 
     @Override
     public T removeFirst() {
-        if (size == 0) {
-            return null;
-        }
-
-        T item;
-        if (first - 1 < 0) {
-            item = items[items.length - 1];
-            first = items.length - 1;
-        } else {
-            item = items[first - 1];
-            first = first - 1;
-        }
-
-        items[first] = null;
-        return item;
-
+        return null;
     }
 
     @Override
@@ -92,6 +70,22 @@ public class ArrayDeque<T> implements Deque<T> {
     @Override
     public T get(int index) {
         return null;
+    }
+
+    @Override
+    public String toString() {
+        // pos represents the element to print out before the loop.
+        int pos = first - 1;
+        StringBuilder out = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            if (pos < 0) {
+                pos = items.length - 1;
+            }
+            out.append(" ").append(items[pos]);
+            pos--;
+        }
+
+        return out.toString().trim();
     }
 
     private void resize(int newSize) {
