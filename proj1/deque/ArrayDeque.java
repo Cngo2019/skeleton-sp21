@@ -42,7 +42,7 @@ public class ArrayDeque<T> implements Deque<T> {
      * This happens only after we add since first always increments.
      */
     private void checkAddPointers() {
-        if (first > size - 1) {
+        if (first > items.length - 1) {
             first = 0;
         }
         if (last < 0) {
@@ -66,7 +66,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -78,16 +78,18 @@ public class ArrayDeque<T> implements Deque<T> {
     @Override
     public T removeFirst() {
         checkRemovePointers();
-        T item = items[first];
         first--;
+        T item = items[first];
+        size--;
         return item;
     }
 
     @Override
     public T removeLast() {
         checkRemovePointers();
-        T item = items[last];
         last++;
+        T item = items[last];
+        size--;
         return item;
     }
 

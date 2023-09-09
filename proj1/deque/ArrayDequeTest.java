@@ -1,4 +1,5 @@
 package deque;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -14,6 +15,7 @@ public class ArrayDequeTest {
         deque.addLast("B");
         deque.addLast("C");
         assertEquals(deque.toString(), "A B C");
+        assertEquals(deque.size(), 3);
     }
 
     @Test
@@ -23,17 +25,18 @@ public class ArrayDequeTest {
         deque.addFirst("B");
         deque.addFirst("C");
         assertEquals(deque.toString(), "C B A");
+        assertEquals(deque.size(), 3);
     }
 
     @Test
     public void test_addFirstAndAddLast() {
-        Deque<String> deque = new ArrayDeque<>();
+        Deque<String> deque = dummyDeque();
         assertEquals(deque.toString(), "G F C B A D E H");
     }
 
     @Test
     public void test_removeFirst() {
-        Deque<String> deque = new ArrayDeque<>();
+        Deque<String> deque = dummyDeque();
         assertEquals(deque.removeFirst(), "G");
         assertEquals(deque.removeFirst(), "F");
         assertEquals(deque.size(), 6);
@@ -47,6 +50,8 @@ public class ArrayDequeTest {
         assertEquals(deque.size(), 6);
         assertEquals(deque.removeLast(), "H");
         assertEquals(deque.removeLast(), "E");
+        assertEquals(deque.size(), 4);
+
     }
 
     @Test
@@ -60,6 +65,38 @@ public class ArrayDequeTest {
         assertEquals(deque.size(), 4);
     }
 
+    /**
+     * We now need to test cases where First and Last circle back
+     */
+
+    @Test
+    public void test_removeFirstWhenSentBack() {
+        Deque<String> deque = new ArrayDeque<>();
+        deque.addLast("A");
+        deque.addLast("B");
+
+        // First should be pointing at index 0 and removal should cause it to circle
+        // to the end of the list
+        assertEquals(deque.removeFirst(), "A");
+        assertEquals(deque.removeFirst(), "B");
+    }
+
+    @Test
+    public void test_addFirstWhenFirstCirclesBack() {
+        Deque<String> deque = new ArrayDeque<>();
+        deque.addLast("A");
+        deque.addLast("B");
+        deque.addLast("C");
+        assertEquals(deque.removeFirst(), "A");
+        assertEquals(deque.removeFirst(), "B");
+
+
+        deque.addFirst("A");
+        deque.addFirst("B");
+        deque.addFirst("C");
+        assertEquals(deque.size(), 4);
+        assertEquals(deque.toString(), "C B A C");
+    }
 
     /**
      * Creates a full deque with sequence G F H B A D E H
@@ -67,8 +104,7 @@ public class ArrayDequeTest {
      * is the last element at the back
      * @return
      */
-    @Test
-    public Deque<String> dummyDeque() {
+    private Deque<String> dummyDeque() {
         Deque<String> deque = new ArrayDeque<>();
         deque.addFirst("A");
         deque.addFirst("B");
