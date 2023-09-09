@@ -165,8 +165,24 @@ public class ArrayDequeTest {
 
         assertEquals(deque.toString(), "B");
         assertEquals(deque.removeFirst(), "B");
-        assertEquals(deque.size(), 0);
+        assertTrue(deque.isEmpty());
+    }
 
+    @Test
+    public void test_ArrayResizeFromSmallToMany() {
+        Deque<String> deque = sampleDequeSixteen();
+        for (int i = 0; i < 16; i++) {
+            deque.removeLast();
+        }
+        assertTrue(deque.isEmpty());
+
+        deque.addFirst("A");
+        deque.addFirst("B");
+
+        assertEquals(deque.size(), 2);
+
+        assertEquals(deque.removeLast(), "A");
+        assertEquals(deque.removeFirst(), "B");
     }
 
     /**
