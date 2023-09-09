@@ -119,7 +119,11 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T get(int index) {
-        return null;
+        if (index <= first) {
+            return items[first - index - 1];
+        }
+
+        return items[items.length - index + last];
     }
 
     @Override
@@ -138,11 +142,6 @@ public class ArrayDeque<T> implements Deque<T> {
         return out.toString().trim();
     }
 
-
-    /**
-     * TODO: Think about resizing.
-     * @return
-     */
     private boolean checkArraySizeNeedsDecreased() {
 
         if (usageLessThan25Percent()) {

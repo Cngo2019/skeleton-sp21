@@ -185,6 +185,20 @@ public class ArrayDequeTest {
         assertEquals(deque.removeFirst(), "B");
     }
 
+    @Test
+    public void test_getMethodForArrayDeque() {
+        // C D B A G F C B A D E H E F Z L
+        Deque<String> deque = sampleDequeSixteen();
+
+        assertEquals(deque.get(0), "C");
+        assertEquals(deque.get(1), "D");
+        assertEquals(deque.get(2), "B");
+
+        assertEquals(deque.get(15), "L");
+        assertEquals(deque.get(14), "Z");
+        assertEquals(deque.get(13), "F");
+    }
+
     /**
      * Creates a full deque with sequence G F C B A D E H
      * where G is the first element at the front and H
@@ -204,6 +218,10 @@ public class ArrayDequeTest {
         return deque;
     }
 
+    /**
+     * C D B A G F C B A D E H E F Z L
+     * @return
+     */
     private Deque<String> sampleDequeSixteen() {
         Deque<String> deque = sampleDequeEight();
         deque.addFirst("A");
