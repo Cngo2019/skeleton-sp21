@@ -81,27 +81,21 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
-
-        if (!hasArraySizeDecreased()) {
-            checkRemovePointers();
-        }
-
+        checkRemovePointers();
         first--;
         T item = items[first];
         size--;
+        checkArraySizeNeedsDecreased();
         return item;
     }
 
     @Override
     public T removeLast() {
-
-        if (!hasArraySizeDecreased()) {
-            checkRemovePointers();
-        }
-
+        checkRemovePointers();
         last++;
         T item = items[last];
         size--;
+        checkArraySizeNeedsDecreased();
         return item;
     }
 
@@ -149,21 +143,20 @@ public class ArrayDeque<T> implements Deque<T> {
      * TODO: Think about resizing.
      * @return
      */
-    private boolean hasArraySizeDecreased() {
-        if (size > 16 &&
-                (size / (double) items.length) < .25) {
-            T[] tempItems = (T[]) new Object[items.length / 2];
-            for (int i = 0; i < items.length; i++) {
-                tempItems[i] = removeLast(); // Dangerous to remove last since it calls itself.
-            }
+    private boolean checkArraySizeNeedsDecreased() {
 
+        if (usageLessThan25Percent()) {
+            resize(items.length / 2);
+            last = items.length - 1;
+            first = size;
             return true;
-        } else if (size <= 8 &&
-                (size / (double) items.length) < .10) {
-
         }
 
         return false;
+    }
+
+    private boolean usageLessThan25Percent() {
+        return size / (double) items.length < .25;
     }
 
     /**
@@ -182,19 +175,27 @@ public class ArrayDeque<T> implements Deque<T> {
     private boolean hasArraySizeIncreased() {
 
         if (size == items.length) {
-            T[] tempItems = (T[]) new Object[items.length * 2];
-            int tempSize = size;
-            for (int i = 0; i < items.length; i++) {
-                tempItems[i] = removeLast();
-            }
-
-            items = tempItems;
+            resize(2 * items.length);
             last = items.length - 1;
-            first = tempSize;
-            size = tempSize;
+            first = size;
             return true;
         }
 
         return false;
+    }
+
+    private void resize(int newLength) {
+        T[] tempItems = (T[]) new Object[newLength];
+        int tempLast = last + 1;
+        for (int i = 0; i < size; i++) {
+
+            if (tempLast > items.length - 1) {
+                tempLast = 0;
+            }
+
+            tempItems[i] = items[tempLast];
+            tempLast++;
+        }
+        items = tempItems;
     }
 }
