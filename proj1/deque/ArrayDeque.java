@@ -81,7 +81,11 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
-        checkRemovePointers();
+
+        if (!hasArraySizeDecreased()) {
+            checkRemovePointers();
+        }
+
         first--;
         T item = items[first];
         size--;
@@ -90,7 +94,11 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeLast() {
-        checkRemovePointers();
+
+        if (!hasArraySizeDecreased()) {
+            checkRemovePointers();
+        }
+
         last++;
         T item = items[last];
         size--;
@@ -137,8 +145,25 @@ public class ArrayDeque<T> implements Deque<T> {
     }
 
 
-    private void checkSizeAfterRemove() {
+    /**
+     * TODO: Think about resizing.
+     * @return
+     */
+    private boolean hasArraySizeDecreased() {
+        if (size > 16 &&
+                (size / (double) items.length) < .25) {
+            T[] tempItems = (T[]) new Object[items.length / 2];
+            for (int i = 0; i < items.length; i++) {
+                tempItems[i] = removeLast(); // Dangerous to remove last since it calls itself.
+            }
 
+            return true;
+        } else if (size <= 8 &&
+                (size / (double) items.length) < .10) {
+
+        }
+
+        return false;
     }
 
     /**
