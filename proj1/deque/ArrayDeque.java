@@ -32,13 +32,31 @@ public class ArrayDeque<T> implements Deque<T> {
         items[first] = item;
         first++;
         size++;
+        checkAddPointers();
     }
+
+    /**
+     * Invariant we need to consider:
+     * There is a case where first and last will be out of bounds.
+     * i.e, first ends up being > max index and last < 0.
+     * This happens only after we add since first always increments.
+     */
+    private void checkAddPointers() {
+        if (first > size - 1) {
+            first = 0;
+        }
+        if (last < 0) {
+            last = items.length - 1;
+        }
+    }
+
 
     @Override
     public void addLast(T item) {
         items[last] = item;
         last--;
         size++;
+        checkAddPointers();
     }
 
     @Override
@@ -59,12 +77,36 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
-        return null;
+        checkRemovePointers();
+        T item = items[first];
+        first--;
+        return item;
     }
 
     @Override
     public T removeLast() {
-        return null;
+        checkRemovePointers();
+        T item = items[last];
+        last++;
+        return item;
+    }
+
+    /**
+     * When we call remove first there is a case where we have to end up
+     * going to the back of the list. Since remove first subtracts we need
+     * to maintain first and last in bounds.
+     * At the end of the remove routine we should be pointing at the next available position.
+     *
+     * Remove methods will end up incrementing/decrementing so need to point these to be 'one-off' the next
+     * position to be removed.
+     */
+    private void checkRemovePointers() {
+        if (first == 0) {
+            first = items.length;
+        }
+        if (last > items.length - 1) {
+            last = -1;
+        }
     }
 
     @Override
