@@ -87,15 +87,47 @@ public class ArrayDequeTest {
         deque.addLast("A");
         deque.addLast("B");
         deque.addLast("C");
-        assertEquals(deque.removeFirst(), "A");
-        assertEquals(deque.removeFirst(), "B");
-
 
         deque.addFirst("A");
         deque.addFirst("B");
         deque.addFirst("C");
+
         assertEquals(deque.size(), 4);
         assertEquals(deque.toString(), "C B A C");
+    }
+
+    @Test
+    public void test_removeLastCirclesBack() {
+        // Given
+        Deque<String> deque = new ArrayDeque<>();
+        deque.addFirst("A");
+        deque.addFirst("B");
+        deque.addFirst("C");
+
+        // Removal of last to make sure we circle back to the front
+        assertEquals(deque.removeLast(), "A");
+        assertEquals(deque.removeLast(), "B");
+        assertEquals(deque.size(), 1);
+        assertEquals(deque.removeLast(), "C");
+
+    }
+
+    @Test
+    public void test_addLastCirclesBack() {
+        // Scenario where last pointer has to go to the front of the array
+        Deque<String> deque = new ArrayDeque<>();
+        deque.addFirst("A");
+        deque.addFirst("B");
+        deque.addFirst("C");
+        deque.removeLast();
+        deque.removeLast();
+
+
+        deque.addLast("A");
+        deque.addLast("B");
+        deque.addLast("C");
+        assertEquals(deque.toString(), "C A B C");
+
     }
 
     /**

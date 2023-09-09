@@ -106,7 +106,7 @@ public class ArrayDeque<T> implements Deque<T> {
         if (first == 0) {
             first = items.length;
         }
-        if (last > items.length - 1) {
+        if (last == items.length - 1) {
             last = -1;
         }
     }
