@@ -203,7 +203,7 @@ public class ArrayDequeTest {
     public void test_randomizedTest() {
         Deque<String> arrayDeque = sampleDequeSixteen();
         for (int i = 0; i < 10000; i++) {
-            if (Math.random() < .5) {
+            if (Math.random() < .3) {
                 if (Math.random() < .3) {
                     arrayDeque.removeFirst();
                 } else {
