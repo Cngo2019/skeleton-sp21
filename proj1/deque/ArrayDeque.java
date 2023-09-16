@@ -119,11 +119,13 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T get(int index) {
-        if (index <= first) {
-            return items[first - index - 1];
+        // Compute the first
+        int indexMap = first - 1 - index;
+        if (indexMap >= 0) {
+            return items[indexMap];
         }
 
-        return items[items.length - index + last];
+        return items[indexMap + items.length];
     }
 
     @Override
