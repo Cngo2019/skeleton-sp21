@@ -33,7 +33,7 @@ public class ArrayDeque<T> implements Deque<T> {
         first++;
         size++;
         if (!hasArraySizeIncreased()) {
-            checkAddPointers();
+            checkAddFirstInBounds();
         }
     }
 
@@ -43,15 +43,17 @@ public class ArrayDeque<T> implements Deque<T> {
      * i.e, first ends up being > max index and last < 0.
      * This happens only after we add since first always increments.
      */
-    private void checkAddPointers() {
-        if (first > items.length - 1) {
-            first = 0;
-        }
+    private void checkAddLastInBounds() {
         if (last < 0) {
             last = items.length - 1;
         }
     }
 
+    private void checkAddFirstInBounds() {
+        if (first > items.length - 1) {
+            first = 0;
+        }
+    }
 
     @Override
     public void addLast(T item) {
@@ -59,7 +61,7 @@ public class ArrayDeque<T> implements Deque<T> {
         last--;
         size++;
         if (!hasArraySizeIncreased()) {
-            checkAddPointers();
+            checkAddLastInBounds();
         }
     }
 
@@ -81,7 +83,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
-        checkRemovePointers();
+        checkRemoveFirstInBoundsPointers();
         first--;
         T item = items[first];
         size--;
@@ -91,7 +93,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeLast() {
-        checkRemovePointers();
+        checkRemoveLastInBounds();
         last++;
         T item = items[last];
         size--;
@@ -108,14 +110,18 @@ public class ArrayDeque<T> implements Deque<T> {
      * Remove methods will end up incrementing/decrementing so need to point these to be 'one-off' the next
      * position to be removed.
      */
-    private void checkRemovePointers() {
-        if (first == 0) {
-            first = items.length;
-        }
+    private void checkRemoveLastInBounds() {
         if (last == items.length - 1) {
             last = -1;
         }
     }
+
+    private void checkRemoveFirstInBoundsPointers() {
+        if (first == 0) {
+            first = items.length;
+        }
+    }
+
 
     @Override
     public T get(int index) {
@@ -146,7 +152,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     private boolean checkArraySizeNeedsDecreased() {
 
-        if (usageLessThan25Percent()) {
+        if (items.length > 8 && usageLessThan25Percent()) {
             resize(items.length / 2);
             last = items.length - 1;
             first = size;
@@ -176,6 +182,7 @@ public class ArrayDeque<T> implements Deque<T> {
     private boolean hasArraySizeIncreased() {
 
         if (size == items.length) {
+            System.out.println("Resizing");
             resize(2 * items.length);
             last = items.length - 1;
             first = size;

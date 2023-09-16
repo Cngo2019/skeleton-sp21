@@ -199,6 +199,26 @@ public class ArrayDequeTest {
         assertEquals(deque.get(13), "F");
     }
 
+    @Test
+    public void test_randomizedTest() {
+        Deque<String> arrayDeque = sampleDequeSixteen();
+        for (int i = 0; i < 10000; i++) {
+            if (Math.random() < .5) {
+                if (Math.random() < .3) {
+                    arrayDeque.removeFirst();
+                } else {
+                    arrayDeque.removeLast();
+                }
+            } else {
+                if (Math.random() < .5) {
+                    arrayDeque.addFirst("A");
+                } else {
+                    arrayDeque.addLast("A");
+                }
+            }
+        }
+    }
+
     /**
      * Creates a full deque with sequence G F C B A D E H
      * where G is the first element at the front and H
